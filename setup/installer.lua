@@ -19,9 +19,7 @@ end
 print('Downloading Installer...')
 
 local files = {
-  "test1.lua",
-  "test2.lua",
-  "folder/test3.lua",
+  "inventory.lua",
 }
 
 for _, name in ipairs(files) do

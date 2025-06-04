@@ -1,1 +1,0 @@
-local hej = 'hej2'
