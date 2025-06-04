@@ -18,25 +18,21 @@ end
 
 print('Downloading Installer...')
 
-local url = "https://raw.githubusercontent.com/paccao/cctweaked-projects/main/remote-inventory/"
-local req = _G.http.get(url)
-if not req then
-  error('Failed to download installer')
-end
+local files = {
+  "test1.lua",
+  "test2.lua",
+  "folder/test3.lua",
+}
 
-local contents = req.readAll()
-if not contents then
-  error('Failed to download installer')
+for _, name in ipairs(files) do
+  local url = "https://raw.githubusercontent.com/paccao/cctweaked-projects/main/remote-inventory/" .. name
+  local req = _G.http.get(url)
+  if req then
+    local h = _G.fs.open("cctweaked-projects/" .. name, "w")
+    h.write(req.readAll())
+    h.close()
+    req.close()
+  else
+    print("Failed to download " .. name)
+  end
 end
-
-print('printing contents...')
-print(contents)
-req.close()
-print('Writing to disk...')
-local folder = _G.fs.open('cctweaked-projects', 'w')
-if not folder then
-  error('Failed to open cctweaked-projects for writing')
-end
-folder.write(contents)
-folder.close()
-print('Done!')
