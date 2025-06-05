@@ -1,6 +1,16 @@
-local chest = peripheral.find("quark:variant_chest")
-if not chest then
-	error("No chest found")
+local chests = {}
+
+for _, name in ipairs(peripheral.getNames()) do
+	local type = peripheral.getType(name)
+	if peripheral.call(name, "list") then
+		print("Found inventory peripheral: " .. name .. " (type: " .. type .. ")")
+		table.insert(chests, peripheral.wrap(type))
+	end
+end
+
+if #chests == 0 then
+	print("No chests found connected to the computer.")
+	return
 end
 
 local items = {}
