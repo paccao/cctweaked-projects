@@ -1,4 +1,4 @@
-print('Choose an option (install|update|uninstall)')
+print('Choose an option (install | update | uninstall)')
 
 local mode = read()
 if not mode then
