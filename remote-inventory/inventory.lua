@@ -69,9 +69,9 @@ end
 local function main()
 	print("Remote inventory helper")
 
-	print("What would you like to do?")
-	print("1. Get all items in the chests")
-	print("2. Search chests for a specific item")
+	print("What would you like to do? (Write the number or press Enter)")
+	print("( 1 ) Get all items in the chests")
+	print("( 2 | Enter ) Search chests for a specific item")
 
 	local answer = read()
 	if answer == "1" then
