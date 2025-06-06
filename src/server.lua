@@ -10,7 +10,6 @@ local function formatTimestamp(ts, tzOffset)
 	return textutils.formatTime(hours, true)
 end
 
--- Server: inventory_server.lua
 rednet.open("top") -- or the side your modem is on
 rednet.host("remote_inventory", "inventory_server")
 print("Server started and listening for requests...")
