@@ -44,9 +44,8 @@ local function fuzzySearchItems(items, searchTerm)
 	searchTerm = searchTerm:lower()
 	local results = {}
 	for name, data in pairs(items) do
-		local displayName = data.displayName or ""
-		if name:lower():find(searchTerm, 1, true) or displayName:lower():find(searchTerm, 1, true) then
-			table.insert(results, { name = name, displayName = displayName, count = data.count })
+		if name:lower():find(searchTerm, 1, true) then
+			table.insert(results, { name = name, count = data.count })
 		end
 	end
 	return results
@@ -62,7 +61,7 @@ local function searchItems()
 		return
 	else
 		for _, item in ipairs(results) do
-			print((item.displayName ~= "" and item.displayName or item.name) .. ": " .. item.count)
+			print(item.name .. ": " .. item.count)
 		end
 	end
 end
