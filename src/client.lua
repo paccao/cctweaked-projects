@@ -60,15 +60,11 @@ while true do
 		local _, response = rednet.receive()
 		local items = textutils.unserialize(response)
 
-		if #items == 0 then
-			print("No items found")
-		else
-			clearScreen()
-			for _, item in pairs(items) do
-				table.insert(itemList, item)
-			end
-			pagedPrint(itemList, function(item) return (item.displayName or item.name) .. ": " .. item.count end)
+		clearScreen()
+		for _, item in pairs(items) do
+			table.insert(itemList, item)
 		end
+		pagedPrint(itemList, function(item) return (item.displayName or item.name) .. ": " .. item.count end)
 	elseif answer == "2" or answer == "" then
 		print("Enter the item name to search for:")
 		local searchTerm = read()
@@ -93,8 +89,5 @@ while true do
 	else
 		print("Invalid option selected.")
 	end
-	print("")
-	print("Press any key...")
-	read()
 	clearScreen()
 end
