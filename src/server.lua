@@ -1,5 +1,12 @@
 local inventory = require("inventory")
 
+local function formatTimestamp(ts)
+	if type(ts) ~= "number" then return tostring(ts) end
+	if ts > 1e10 then ts = ts / 1000 end
+	local hours = (ts % 86400) / 3600
+	return textutils.formatTime(hours, true)
+end
+
 -- Server: inventory_server.lua
 rednet.open("top") -- or the side your modem is on
 rednet.host("remote_inventory", "inventory_server")
@@ -10,7 +17,11 @@ while true do
 	local clientLabel = (type(message) == "table" and message.label) or ("ID " .. tostring(sender))
 	local action = (type(message) == "table" and message.action) or "unknown"
 	local timestamp = (type(message) == "table" and message.timestamp) or "no timestamp"
-	print(("Connection from: %s | Action: %s | Timestamp: %s"):format(clientLabel, action, tostring(timestamp)))
+	if timestamp then
+		print(("Connection from: %s | Action: %s | Timestamp: %s"):format(
+			clientLabel, action, formatTimestamp(timestamp)
+		))
+	end
 	if type(message) == "table" and message.action == "GetAllItems" then
 		local items = inventory.GetAllItems(false, false)
 		rednet.send(sender, textutils.serialize(items))
