@@ -19,7 +19,7 @@ while true do
 	local clientLabel = (type(message) == "table" and message.label) or ("ID " .. tostring(sender))
 	local action = (type(message) == "table" and message.action) or "unknown"
 	local timestamp = (type(message) == "table" and message.timestamp) or "no timestamp"
-	if timestamp then
+	if message.timestamp then
 		print(("Connection from: %s | Action: %s | Timestamp: %s"):format(
 			clientLabel, action, formatTimestamp(timestamp, 2)
 		))
