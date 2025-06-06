@@ -1,9 +1,12 @@
 local inventory = require("inventory")
 
-local function formatTimestamp(ts)
+local function formatTimestamp(ts, tzOffset)
 	if type(ts) ~= "number" then return tostring(ts) end
 	if ts > 1e10 then ts = ts / 1000 end
-	local hours = (ts % 86400) / 3600
+	tzOffset = tzOffset or 1 -- default to UTC + 1 if not provided
+	local hours = ((ts % 86400) / 3600) + tzOffset
+	if hours < 0 then hours = hours + 24 end
+	if hours >= 24 then hours = hours - 24 end
 	return textutils.formatTime(hours, true)
 end
 
@@ -19,7 +22,7 @@ while true do
 	local timestamp = (type(message) == "table" and message.timestamp) or "no timestamp"
 	if timestamp then
 		print(("Connection from: %s | Action: %s | Timestamp: %s"):format(
-			clientLabel, action, formatTimestamp(timestamp)
+			clientLabel, action, formatTimestamp(timestamp, 2)
 		))
 	end
 	if type(message) == "table" and message.action == "GetAllItems" then
