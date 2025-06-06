@@ -23,9 +23,15 @@ print("( 1 ) Get all items in the chests")
 print("( 2 / ENTER ) Search chests at home for a specific item")
 
 local answer = read()
+local label = os.getComputerLabel() or tostring(os.getComputerID())
+local timestamp = os.epoch and os.epoch("utc") or os.time() -- fallback if os.epoch not available
+
 if answer == "1" then
-	local label = os.getComputerLabel() or tostring(os.getComputerID())
-	rednet.send(serverID, { action = "GetAllItems", label = label })
+	rednet.send(serverID, {
+		action = "GetAllItems",
+		label = label,
+		timestamp = timestamp
+	})
 	local _, response = rednet.receive()
 	local items = textutils.unserialize(response)
 
@@ -36,7 +42,12 @@ if answer == "1" then
 elseif answer == "2" or answer == "" then
 	print("Enter the item name to search for:")
 	local searchTerm = read()
-	rednet.send(serverID, { action = "SearchItems", term = searchTerm })
+	rednet.send(serverID, {
+		action = "SearchItems",
+		term = searchTerm,
+		label = label,
+		timestamp = timestamp
+	})
 	local _, response = rednet.receive()
 	local items = textutils.unserialize(response)
 

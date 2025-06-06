@@ -8,7 +8,9 @@ print("Server started and listening for requests...")
 while true do
 	local sender, message = rednet.receive()
 	local clientLabel = (type(message) == "table" and message.label) or ("ID " .. tostring(sender))
-	print("Connection from: " .. clientLabel)
+	local action = (type(message) == "table" and message.action) or "unknown"
+	local timestamp = (type(message) == "table" and message.timestamp) or "no timestamp"
+	print(("Connection from: %s | Action: %s | Timestamp: %s"):format(clientLabel, action, tostring(timestamp)))
 	if type(message) == "table" and message.action == "GetAllItems" then
 		local items = inventory.GetAllItems(false, false)
 		rednet.send(sender, textutils.serialize(items))
