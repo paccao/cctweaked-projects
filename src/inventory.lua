@@ -40,8 +40,9 @@ function inventory.GetAllItems(shouldPrint, debugMode)
 	for _, chest in ipairs(chests) do
 		for slot, item in pairs(chest.list()) do
 			if item then
+				local detail = chest.getItemDetail(slot)
 				if not items[item.name] then
-					items[item.name] = { count = 0, slots = {} }
+					items[item.name] = { count = 0, slots = {}, displayName = detail and detail.displayName or item.name }
 				end
 				items[item.name].count = items[item.name].count + item.count
 				table.insert(items[item.name].slots, slot)
@@ -52,8 +53,8 @@ function inventory.GetAllItems(shouldPrint, debugMode)
 	if shouldPrint then
 		print("Items in the chest:")
 		print("")
-		for name, data in pairs(items) do
-			print(name .. ": " .. data.count)
+		for data in pairs(items) do
+			print(data.displayName .. ": " .. data.count)
 		end
 		return
 	end
@@ -65,7 +66,7 @@ function inventory.FuzzySearchItems(items, searchTerm)
 	local results = {}
 	for name, data in pairs(items) do
 		if name:lower():find(searchTerm, 1, true) then
-			table.insert(results, { name = name, count = data.count })
+			table.insert(results, { name = name, count = data.count, displayName = data.displayName })
 		end
 	end
 	return results
@@ -81,7 +82,7 @@ function inventory.SearchItems()
 		return
 	else
 		for _, item in ipairs(results) do
-			print(item.name .. ": " .. item.count)
+			print(item.displayName .. ": " .. item.count)
 		end
 	end
 end
