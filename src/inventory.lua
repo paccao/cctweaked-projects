@@ -1,6 +1,6 @@
 local inventory = {}
 
-function inventory.GetAllItems(shouldPrint, debugMode)
+function inventory.GetAllItems()
 	local chests = {}
 
 	-- We ignore all peripheral types that are not relevant for inventory management
@@ -24,9 +24,6 @@ function inventory.GetAllItems(shouldPrint, debugMode)
 	for _, name in ipairs(peripheral.getNames()) do
 		local type = peripheral.getType(name)
 		if not ignoreTypes[type] and peripheral.call(name, "list") then
-			if debugMode then
-				print("Debug: Found peripheral " .. name .. " of type " .. type)
-			end
 			table.insert(chests, peripheral.wrap(name))
 		end
 	end
@@ -55,14 +52,6 @@ function inventory.GetAllItems(shouldPrint, debugMode)
 		end
 	end
 
-	if shouldPrint then
-		print("Items in the chest:")
-		print("")
-		for data in pairs(items) do
-			print(data.displayName .. ": " .. data.count)
-		end
-		return
-	end
 	return items
 end
 
@@ -75,26 +64,6 @@ function inventory.FuzzySearchItems(items, searchTerm)
 		end
 	end
 	return results
-end
-
-function inventory.SearchItems()
-	print("Enter the item name to search for:")
-	local searchTerm = read()
-	local items = inventory.GetAllItems(false, false)
-	local results = inventory.FuzzySearchItems(items, searchTerm)
-	if #results == 0 then
-		print("No items found")
-		return
-	else
-		for _, item in ipairs(results) do
-			print(item.displayName .. ": " .. item.count)
-		end
-	end
-end
-
-function inventory.ClearScreen()
-	term.clear()
-	term.setCursorPos(1, 1)
 end
 
 return inventory

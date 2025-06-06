@@ -1,3 +1,8 @@
+local function clearScreen()
+	term.clear()
+	term.setCursorPos(1, 1)
+end
+
 local sides = { "top", "bottom", "left", "right", "front", "back" }
 for _, side in ipairs(sides) do
 	if peripheral.getType(side) == "modem" then
@@ -6,9 +11,8 @@ for _, side in ipairs(sides) do
 end
 local serverID = rednet.lookup("remote_inventory", "inventory_server")
 
-print("Connecting to remote inventory server...")
 if not serverID then
-	print(
+	error(
 		"Failed to connect to the remote inventory server. Please ensure that the server is running and the modem is connected.")
 	return
 end
@@ -20,12 +24,13 @@ print("( 2 / ENTER ) Search chests at home for a specific item")
 
 local answer = read()
 if answer == "1" then
-	rednet.send(serverID, { action = "GetAllItems", shouldPrint = false, debugMode = false })
+	rednet.send(serverID, { action = "GetAllItems" })
 	local _, response = rednet.receive()
 	local items = textutils.unserialize(response)
-	print("Items in the chest:")
+
+	clearScreen()
 	for name, data in pairs(items) do
-		print(name .. ": " .. data.count)
+		print(displayName .. ": " .. data.count)
 	end
 elseif answer == "2" or answer == "" then
 	print("Enter the item name to search for:")
@@ -33,10 +38,11 @@ elseif answer == "2" or answer == "" then
 	rednet.send(serverID, { action = "SearchItems", term = searchTerm })
 	local _, response = rednet.receive()
 	local results = textutils.unserialize(response)
+
 	if #results == 0 then
 		print("No items found")
 	else
-		inventory.ClearScreen()
+		clearScreen()
 		for _, item in ipairs(results) do
 			print(item.displayName .. ": " .. item.count)
 		end
