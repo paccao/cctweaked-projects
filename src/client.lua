@@ -18,47 +18,55 @@ if not serverID then
 end
 
 print("Remote inventory helper")
-print("What would you like to do?")
-print("( 1 ) Get all items in the chests")
-print("( 2 / ENTER ) Search chests at home for a specific item")
 
-local answer = read()
-local label = os.getComputerLabel() or tostring(os.getComputerID())
-local timestamp = os.epoch and os.epoch("utc") or os.time() -- fallback if os.epoch not available
+while true do
+	print("What would you like to do?")
+	print("( 1 ) Get all items in the chests")
+	print("( 2 / ENTER ) Search chests at home for a specific item")
 
-if answer == "1" then
-	rednet.send(serverID, {
-		action = "GetAllItems",
-		label = label,
-		timestamp = timestamp
-	})
-	local _, response = rednet.receive()
-	local items = textutils.unserialize(response)
 
-	clearScreen()
-	for _, item in pairs(items) do
-		print(item.displayName .. ": " .. item.count)
-	end
-elseif answer == "2" or answer == "" then
-	print("Enter the item name to search for:")
-	local searchTerm = read()
-	rednet.send(serverID, {
-		action = "SearchItems",
-		term = searchTerm,
-		label = label,
-		timestamp = timestamp
-	})
-	local _, response = rednet.receive()
-	local items = textutils.unserialize(response)
+	local answer = read()
+	local label = os.getComputerLabel() or tostring(os.getComputerID())
+	local timestamp = os.epoch and os.epoch("utc") or os.time() -- fallback if os.epoch not available
 
-	if #items == 0 then
-		print("No items found")
-	else
+	if answer == "1" then
+		rednet.send(serverID, {
+			action = "GetAllItems",
+			label = label,
+			timestamp = timestamp
+		})
+		local _, response = rednet.receive()
+		local items = textutils.unserialize(response)
+
 		clearScreen()
-		for _, item in ipairs(items) do
+		for _, item in pairs(items) do
 			print(item.displayName .. ": " .. item.count)
 		end
+	elseif answer == "2" or answer == "" then
+		print("Enter the item name to search for:")
+		local searchTerm = read()
+		rednet.send(serverID, {
+			action = "SearchItems",
+			term = searchTerm,
+			label = label,
+			timestamp = timestamp
+		})
+		local _, response = rednet.receive()
+		local items = textutils.unserialize(response)
+
+		if #items == 0 then
+			print("No items found")
+		else
+			clearScreen()
+			for _, item in ipairs(items) do
+				print(item.displayName .. ": " .. item.count)
+			end
+		end
+	else
+		print("Invalid option selected.")
 	end
-else
-	print("Invalid option selected.")
+	print("")
+	print("Press any key...")
+	read()
+	clearScreen()
 end
