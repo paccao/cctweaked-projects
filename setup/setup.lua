@@ -3,3 +3,4 @@ local file = _G.fs.open('installer.lua', 'w')
 file.write(req.readAll())
 file.close()
 req.close()
+return
