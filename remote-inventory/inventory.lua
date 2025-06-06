@@ -1,10 +1,12 @@
-local function getAllItems(shouldPrint)
+local function getAllItems(shouldPrint, debugMode)
 	local chests = {}
 
 	for _, name in ipairs(peripheral.getNames()) do
 		local type = peripheral.getType(name)
 		if peripheral.call(name, "list") then
-			print("Found inventory peripheral: " .. name .. " (type: " .. type .. ")")
+			if debugMode then
+				print("Debug: Found peripheral " .. name .. " of type " .. type)
+			end
 			table.insert(chests, peripheral.wrap(name))
 		end
 	end
@@ -29,6 +31,7 @@ local function getAllItems(shouldPrint)
 
 	if shouldPrint then
 		print("Items in the chest:")
+		print("")
 		for name, data in pairs(items) do
 			print(name .. ": " .. data.count)
 		end
@@ -52,7 +55,7 @@ end
 local function searchItems()
 	print("Enter the item name to search for:")
 	local searchTerm = read()
-	local items = getAllItems(false)
+	local items = getAllItems(false, false)
 	local results = fuzzySearchItems(items, searchTerm)
 	if #results == 0 then
 		print("No items found")
@@ -74,8 +77,12 @@ local function main()
 	local answer = read()
 	if answer == "1" then
 		getAllItems(true)
-	elseif answer == "2" then
+	elseif answer == "2" or answer == "" then
 		searchItems()
+	elseif answer == "debug" then
+		getAllItems(true, true)
+	else
+		print("Invalid option selected.")
 	end
 end
 
