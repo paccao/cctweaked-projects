@@ -1,5 +1,17 @@
-rednet.open("top")
+local sides = { "top", "bottom", "left", "right", "front", "back" }
+for _, side in ipairs(sides) do
+	if peripheral.getType(side) == "modem" then
+		rednet.open(side)
+	end
+end
 local serverID = rednet.lookup("remote_inventory", "inventory_server")
+
+print("Connecting to remote inventory server...")
+if not serverID then
+	print(
+	"Failed to connect to the remote inventory server. Please ensure that the server is running and the modem is connected.")
+	return
+end
 
 print("Remote inventory helper")
 print("What would you like to do?")
