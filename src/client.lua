@@ -64,6 +64,14 @@ while true do
 		for _, item in pairs(items) do
 			table.insert(itemList, item)
 		end
+
+		-- Sort alphabetically by displayName or name (case-insensitive)
+		table.sort(itemList, function(a, b)
+			local aName = (a.displayName or a.name):lower()
+			local bName = (b.displayName or b.name):lower()
+			return aName < bName
+		end)
+
 		pagedPrint(itemList, function(item) return (item.displayName or item.name) .. ": " .. item.count end)
 	elseif answer == "2" or answer == "" then
 		print("Enter the item name to search for:")
@@ -84,6 +92,14 @@ while true do
 			for _, item in pairs(items) do
 				table.insert(itemList, item)
 			end
+
+			-- Sort alphabetically by displayName or name (case-insensitive)
+			table.sort(itemList, function(a, b)
+				local aName = (a.displayName or a.name):lower()
+				local bName = (b.displayName or b.name):lower()
+				return aName < bName
+			end)
+
 			pagedPrint(itemList, function(item) return (item.displayName or item.name) .. ": " .. item.count end)
 		end
 	else
