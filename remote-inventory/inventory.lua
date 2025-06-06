@@ -1,9 +1,27 @@
 local function getAllItems(shouldPrint, debugMode)
 	local chests = {}
 
+	-- We ignore all peripheral types that are not relevant for inventory management
+	local ignoreTypes = {
+		modem = true,
+		monitor = true,
+		speaker = true,
+		printer = true,
+		drive = true,
+		turtle = true,
+		computer = true,
+		command = true,
+		chatBox = true,
+		sensor = true,
+		energy_storage = true,
+		redstoneIntegrator = true,
+		playerDetector = true,
+		disk_drive = true,
+	}
+
 	for _, name in ipairs(peripheral.getNames()) do
 		local type = peripheral.getType(name)
-		if peripheral.call(name, "list") then
+		if not ignoreTypes[type] and peripheral.call(name, "list") then
 			if debugMode then
 				print("Debug: Found peripheral " .. name .. " of type " .. type)
 			end
