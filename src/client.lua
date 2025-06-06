@@ -1,5 +1,5 @@
 rednet.open("top")
-local serverID = 7
+local serverID = rednet.lookup("remote_inventory", "inventory_server")
 
 print("Remote inventory helper")
 print("What would you like to do?")
@@ -8,7 +8,7 @@ print("( 2 / ENTER ) Search chests at home for a specific item")
 
 local answer = read()
 if answer == "1" then
-	rednet.send(serverID, { action = "getAllItems", shouldPrint = false, debugMode = false })
+	rednet.send(serverID, { action = "GetAllItems", shouldPrint = false, debugMode = false })
 	local _, response = rednet.receive()
 	local items = textutils.unserialize(response)
 	print("Items in the chest:")
@@ -18,7 +18,7 @@ if answer == "1" then
 elseif answer == "2" or answer == "" then
 	print("Enter the item name to search for:")
 	local searchTerm = read()
-	rednet.send(serverID, { action = "searchItems", term = searchTerm })
+	rednet.send(serverID, { action = "SearchItems", term = searchTerm })
 	local _, response = rednet.receive()
 	local results = textutils.unserialize(response)
 	if #results == 0 then
