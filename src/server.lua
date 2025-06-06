@@ -3,6 +3,7 @@ local inventory = require("inventory")
 -- Server: inventory_server.lua
 rednet.open("top") -- or the side your modem is on
 rednet.host("remote_inventory", "inventory_server")
+print("Server started and listening for requests...")
 
 while true do
 	local sender, message = rednet.receive()
