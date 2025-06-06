@@ -37,12 +37,17 @@ function inventory.GetAllItems(shouldPrint, debugMode)
 	end
 
 	local items = {}
+	local seen = {}
+
 	for _, chest in ipairs(chests) do
 		for slot, item in pairs(chest.list()) do
 			if item then
-				local detail = chest.getItemDetail(slot)
+				if not seen[item.name] then
+					local detail = chest.getItemDetail(slot)
+					seen[item.name] = detail and detail.displayName or item.name
+				end
 				if not items[item.name] then
-					items[item.name] = { count = 0, slots = {}, displayName = detail and detail.displayName or item.name }
+					items[item.name] = { count = 0, slots = {}, displayName = seen[item.name] }
 				end
 				items[item.name].count = items[item.name].count + item.count
 				table.insert(items[item.name].slots, slot)
