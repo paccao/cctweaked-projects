@@ -92,7 +92,7 @@ function inventory.SearchItems()
 	end
 end
 
-local function clearScreen()
+function inventory.ClearScreen()
 	term.clear()
 	term.setCursorPos(1, 1)
 end
@@ -106,13 +106,13 @@ local function main()
 
 	local answer = read()
 	if answer == "1" then
-		clearScreen()
+		inventory.clearScreen()
 		inventory.GetAllItems(true)
 	elseif answer == "2" or answer == "" then
-		clearScreen()
+		inventory.clearScreen()
 		inventory.SearchItems()
 	elseif answer == "debug" then
-		clearScreen()
+		inventory.clearScreen()
 		inventory.GetAllItems(true, true)
 	else
 		print("Invalid option selected.")
