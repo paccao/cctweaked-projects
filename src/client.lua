@@ -24,7 +24,8 @@ print("( 2 / ENTER ) Search chests at home for a specific item")
 
 local answer = read()
 if answer == "1" then
-	rednet.send(serverID, { action = "GetAllItems" })
+	local label = os.getComputerLabel() or tostring(os.getComputerID())
+	rednet.send(serverID, { action = "GetAllItems", label = label })
 	local _, response = rednet.receive()
 	local items = textutils.unserialize(response)
 
