@@ -29,21 +29,21 @@ if answer == "1" then
 	local items = textutils.unserialize(response)
 
 	clearScreen()
-	for name, data in pairs(items) do
-		print(displayName .. ": " .. data.count)
+	for _, item in pairs(items) do
+		print(item.displayName .. ": " .. item.count)
 	end
 elseif answer == "2" or answer == "" then
 	print("Enter the item name to search for:")
 	local searchTerm = read()
 	rednet.send(serverID, { action = "SearchItems", term = searchTerm })
 	local _, response = rednet.receive()
-	local results = textutils.unserialize(response)
+	local items = textutils.unserialize(response)
 
-	if #results == 0 then
+	if #items == 0 then
 		print("No items found")
 	else
 		clearScreen()
-		for _, item in ipairs(results) do
+		for _, item in ipairs(items) do
 			print(item.displayName .. ": " .. item.count)
 		end
 	end
