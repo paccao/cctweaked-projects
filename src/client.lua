@@ -36,6 +36,7 @@ elseif answer == "2" or answer == "" then
 	if #results == 0 then
 		print("No items found")
 	else
+		inventory.ClearScreen()
 		for _, item in ipairs(results) do
 			print(item.displayName .. ": " .. item.count)
 		end
