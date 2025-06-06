@@ -84,6 +84,11 @@ local function searchItems()
 	end
 end
 
+local function clearScreen()
+	term.clear()
+	term.setCursorPos(1, 1)
+end
+
 local function main()
 	print("Remote inventory helper")
 
@@ -93,10 +98,13 @@ local function main()
 
 	local answer = read()
 	if answer == "1" then
+		clearScreen()
 		getAllItems(true)
 	elseif answer == "2" or answer == "" then
+		clearScreen()
 		searchItems()
 	elseif answer == "debug" then
+		clearScreen()
 		getAllItems(true, true)
 	else
 		print("Invalid option selected.")
