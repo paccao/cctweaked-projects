@@ -1,4 +1,6 @@
-local function getAllItems(shouldPrint, debugMode)
+local inventory = {}
+
+function inventory.GetAllItems(shouldPrint, debugMode)
 	local chests = {}
 
 	-- We ignore all peripheral types that are not relevant for inventory management
@@ -58,7 +60,7 @@ local function getAllItems(shouldPrint, debugMode)
 	return items
 end
 
-local function fuzzySearchItems(items, searchTerm)
+function inventory.FuzzySearchItems(items, searchTerm)
 	searchTerm = searchTerm:lower()
 	local results = {}
 	for name, data in pairs(items) do
@@ -69,11 +71,11 @@ local function fuzzySearchItems(items, searchTerm)
 	return results
 end
 
-local function searchItems()
+function inventory.SearchItems()
 	print("Enter the item name to search for:")
 	local searchTerm = read()
-	local items = getAllItems(false, false)
-	local results = fuzzySearchItems(items, searchTerm)
+	local items = inventory.GetAllItems(false, false)
+	local results = inventory.FuzzySearchItems(items, searchTerm)
 	if #results == 0 then
 		print("No items found")
 		return
@@ -99,16 +101,18 @@ local function main()
 	local answer = read()
 	if answer == "1" then
 		clearScreen()
-		getAllItems(true)
+		inventory.GetAllItems(true)
 	elseif answer == "2" or answer == "" then
 		clearScreen()
-		searchItems()
+		inventory.SearchItems()
 	elseif answer == "debug" then
 		clearScreen()
-		getAllItems(true, true)
+		inventory.GetAllItems(true, true)
 	else
 		print("Invalid option selected.")
 	end
 end
 
 main()
+
+return inventory

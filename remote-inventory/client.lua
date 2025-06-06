@@ -1,0 +1,33 @@
+rednet.open("top")
+local serverID = 7
+
+print("Remote inventory helper")
+print("What would you like to do?")
+print("( 1 ) Get all items in the chests")
+print("( 2 / ENTER ) Search chests at home for a specific item")
+
+local answer = read()
+if answer == "1" then
+	rednet.send(serverID, { action = "getAllItems", shouldPrint = false, debugMode = false })
+	local _, response = rednet.receive()
+	local items = textutils.unserialize(response)
+	print("Items in the chest:")
+	for name, data in pairs(items) do
+		print(name .. ": " .. data.count)
+	end
+elseif answer == "2" or answer == "" then
+	print("Enter the item name to search for:")
+	local searchTerm = read()
+	rednet.send(serverID, { action = "searchItems", term = searchTerm })
+	local _, response = rednet.receive()
+	local results = textutils.unserialize(response)
+	if #results == 0 then
+		print("No items found")
+	else
+		for _, item in ipairs(results) do
+			print(item.name .. ": " .. item.count)
+		end
+	end
+else
+	print("Invalid option selected.")
+end
