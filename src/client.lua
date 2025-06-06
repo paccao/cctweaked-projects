@@ -9,7 +9,7 @@ local serverID = rednet.lookup("remote_inventory", "inventory_server")
 print("Connecting to remote inventory server...")
 if not serverID then
 	print(
-	"Failed to connect to the remote inventory server. Please ensure that the server is running and the modem is connected.")
+		"Failed to connect to the remote inventory server. Please ensure that the server is running and the modem is connected.")
 	return
 end
 
@@ -37,7 +37,7 @@ elseif answer == "2" or answer == "" then
 		print("No items found")
 	else
 		for _, item in ipairs(results) do
-			print(item.name .. ": " .. item.count)
+			print(item.displayName .. ": " .. item.count)
 		end
 	end
 else
